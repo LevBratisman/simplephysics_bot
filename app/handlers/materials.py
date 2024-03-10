@@ -7,6 +7,7 @@ from aiogram.fsm.context import FSMContext
 
 from app.database.dao import get_docs_by_material, get_material_by_name, get_doc_by_name
 from app.keyboards import reply as rp
+from app.keyboards import inline as inl
 from app.keyboards import builder
 
 
@@ -20,6 +21,7 @@ materials_router = Router()
 class Materials(StatesGroup):
     material = State()
     document = State()
+    to_menu = State()
 
 
 # ------------ GET MATERIALS start ----------
@@ -57,7 +59,7 @@ async def choose_material(callback: CallbackQuery, state: FSMContext):
     
 @materials_router.callback_query(Materials.document)
 async def get_material_document(callback: CallbackQuery, state: FSMContext):
-    if callback.data == '⬅️Вернуться':
+    if callback.data == '⬅️Назад':
         await callback.answer('Материалы')
         await state.set_state(Materials.material)
         await callback.message.edit_text("Выберите категорию:", reply_markup=builder.get_materials_kb())
@@ -69,12 +71,35 @@ async def get_material_document(callback: CallbackQuery, state: FSMContext):
         doc = await get_doc_by_name(data.get("document"))
         
         if callback.from_user.id == int(os.getenv('ADMIN_ID')):
-            await callback.message.answer_document(doc[3], reply_markup=rp.start_admin)
+            await callback.message.answer_document(doc[3], reply_markup=inl.back)
             await callback.answer('Документ отправлен!')
         else:
-            await callback.message.answer_document(doc[3], reply_markup=rp.start)
+            await callback.message.answer_document(doc[3], reply_markup=inl.back)
             await callback.answer('Документ отправлен!')
         
+        await state.set_state(Materials.to_menu)
+        
+        
+@materials_router.callback_query(Materials.to_menu)
+async def get_materials_to_menu(callback: CallbackQuery, state: FSMContext):
+    if callback.data == 'back_to_menu':
+        await callback.answer(f'Меню') 
         await state.clear()
+        await callback.message.delete()
+        if callback.from_user.id == int(os.getenv('ADMIN_ID')):
+            await callback.message.answer("Вы вернулись в главное меню", 
+                                         reply_markup=rp.start_admin)
+        else:
+            await callback.message.answer("Вы вернулись в главное меню", 
+                                         reply_markup=rp.start)
+    elif callback.data == 'back':
+        data = await state.get_data()
+        await callback.answer(f'{data.get("document")}')
+        await state.set_state(Materials.document)
+        material = await get_material_by_name(data.get("material"))
+        material_id = material[0]
+        await callback.message.delete()
+        await callback.message.answer("Выберите документ:", 
+                                        reply_markup=builder.get_docs_kb(material_id))
         
 # ------------ GET MATERIALS end ----------
