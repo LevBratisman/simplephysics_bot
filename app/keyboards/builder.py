@@ -4,7 +4,9 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.database.dao import get_materials_all, get_docs_all
+from app.database.init import db_start
 
+asyncio.run(db_start())
 
 # ---------Materials keyboard----------
 
@@ -30,7 +32,7 @@ def get_docs_kb(catalog_id):
     for doc in docs_data:
         if doc[2] == catalog_id:
             kb.add(InlineKeyboardButton(text=doc[1], callback_data=doc[1]))
-    return kb.adjust(2).as_markup(resize_keyboard=True)
+    return kb.adjust(1).as_markup(resize_keyboard=True)
 
 async def update_docs_kb():
     global docs_data

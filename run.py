@@ -3,6 +3,7 @@ from dotenv import load_dotenv, find_dotenv
 
 from aiogram import Dispatcher, Bot
 
+from app.database.init import db_start
 from app.cmd_list import private
 from app.handlers.common import common_router
 from app.handlers.commands import cmd_router
@@ -10,7 +11,7 @@ from app.handlers.admin.base import admin_router
 from app.handlers.admin.materials_settings import materials_settings_router
 from app.handlers.admin.documents_settings import documents_settings_router
 from app.handlers.materials import materials_router
-from app.database.init import db_start
+
 
 
 load_dotenv(find_dotenv())
@@ -25,13 +26,14 @@ async def on_startup():
 
 
 async def main():
+    
     # Include routers
+    dp.include_router(cmd_router)
     dp.include_router(admin_router)
     dp.include_router(materials_settings_router)
     dp.include_router(documents_settings_router)
     dp.include_router(materials_router)
     dp.include_router(common_router)
-    dp.include_router(cmd_router)
     
     # Start bot
     await on_startup()
@@ -40,6 +42,7 @@ async def main():
     await dp.start_polling(bot)
 
 
+# START BOT
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     try:

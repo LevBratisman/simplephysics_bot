@@ -4,7 +4,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 from app.filters import AdminFilter
-from app.database.dao import add_material, del_material
+from app.database.dao import add_material, del_material, del_docs_by_material, get_material_by_name
 from app.keyboards import builder
 
 from app.keyboards import reply as rp
@@ -76,6 +76,8 @@ async def del_material_confirmation(callback: CallbackQuery, state: FSMContext):
     if callback.data == "confirm":
         data = await state.get_data()
         name = data.get("name")
+        material = await get_material_by_name(name)
+        await del_docs_by_material(material[0])
         await del_material(name)
         await callback.message.answer(f"Материал '{name}' успешно удален!")
         await builder.update_materials_kb()

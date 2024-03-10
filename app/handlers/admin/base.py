@@ -4,7 +4,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 from app.filters import AdminFilter
-from app.database.dao import get_users_all
+from app.database.dao import get_users_all, get_materials_all, get_docs_all
 
 from app.keyboards import reply as rp
 from app.keyboards import inline as inl
@@ -21,7 +21,7 @@ class SendAll(StatesGroup):
     
 # -------- Base commands --------
 
-@admin_router.message(AdminFilter(), F.text == 'Админ панель')
+@admin_router.message(AdminFilter(), F.text == '⚙️Админ панель')
 async def to_admin_panel(message: Message):
     await message.answer("Вы вошли в админ-панель", reply_markup=rp.admin_panel)
 
@@ -64,7 +64,6 @@ async def sendall_photo_confirm(callback: CallbackQuery, state: FSMContext):
         await state.set_state(SendAll.confirmation)
         
         data = await state.get_data()
-        await callback.message.answer(data.get("text"))
         await callback.message.answer("Вы точно хотите отправить эту рассылку?", 
                             reply_markup=inl.confirm_sendall)
         
@@ -102,3 +101,23 @@ async def sendall_confirmation(callback: CallbackQuery, state: FSMContext, bot: 
     await state.clear()
     
 # ----------------SENDALL end-----------------
+
+
+
+# ----------------STATISTICS-----------------
+
+@admin_router.message(AdminFilter(), F.text == 'Статистика')
+async def get_statistics(message: Message):
+    await message.answer(f'Всего пользователей: {len(await get_users_all())}')
+    await message.answer(f'Всего материалов: {len(await get_materials_all())}')
+    await message.answer(f'Всего документов: {len(await get_docs_all())}')
+    users = await get_users_all()
+    await message.answer(f'----------------------------\n' +
+                        f'<i>Список пользователей:</i>', parse_mode='HTML')
+    if len(users) > 0:
+        for i in range(20):
+            try:
+                user = users[i]
+                await message.answer(f'{i+1}) {user[1]}, {user[2]}')
+            except IndexError:
+                break

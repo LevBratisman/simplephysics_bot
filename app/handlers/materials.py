@@ -1,7 +1,6 @@
 import asyncio, os
 
 from aiogram import Router, F
-from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
@@ -25,27 +24,29 @@ class Materials(StatesGroup):
 
 # ------------ GET MATERIALS start ----------
 
-@materials_router.message(F.text == 'Материалы')
+@materials_router.message(F.text == '📖Материалы')
 async def get_materials_start(message: Message, state: FSMContext):
     await state.set_state(Materials.material)
     await message.answer("Подгружаю материалы...", reply_markup=ReplyKeyboardRemove())
     await asyncio.sleep(0.7)
-    await message.answer("Готово! Вот ссылки на материалы:", 
+    await message.answer("Готово! Выбирайте:", 
                          reply_markup=builder.get_materials_kb())
     
     
 @materials_router.callback_query(Materials.material)
 async def choose_material(callback: CallbackQuery, state: FSMContext):
-    if callback.data == 'Вернуться к меню':
+    if callback.data == '⬅️Вернуться к меню':
+        await callback.answer(f'Меню') 
         await state.clear()
+        await callback.message.delete()
         if callback.from_user.id == int(os.getenv('ADMIN_ID')):
             await callback.message.answer("Вы вернулись в главное меню", 
                                          reply_markup=rp.start_admin)
         else:
             await callback.message.answer("Вы вернулись в главное меню", 
                                          reply_markup=rp.start)
-        await callback.message.delete()
     else:
+        await callback.answer(f'{callback.data}') 
         await state.update_data(material=callback.data)
         await state.set_state(Materials.document)
         material = await get_material_by_name(callback.data)
@@ -56,9 +57,10 @@ async def choose_material(callback: CallbackQuery, state: FSMContext):
     
 @materials_router.callback_query(Materials.document)
 async def get_material_document(callback: CallbackQuery, state: FSMContext):
-    if callback.data == 'Вернуться':
+    if callback.data == '⬅️Вернуться':
+        await callback.answer('Материалы')
         await state.set_state(Materials.material)
-        await callback.message.edit_text("Материалы:", reply_markup=builder.get_materials_kb())
+        await callback.message.edit_text("Выберите категорию:", reply_markup=builder.get_materials_kb())
     else:
         await state.update_data(document=callback.data)
         await callback.message.delete()
@@ -68,9 +70,11 @@ async def get_material_document(callback: CallbackQuery, state: FSMContext):
         
         if callback.from_user.id == int(os.getenv('ADMIN_ID')):
             await callback.message.answer_document(doc[3], reply_markup=rp.start_admin)
+            await callback.answer('Документ отправлен!')
         else:
             await callback.message.answer_document(doc[3], reply_markup=rp.start)
+            await callback.answer('Документ отправлен!')
         
-        state.clear()
+        await state.clear()
         
 # ------------ GET MATERIALS end ----------

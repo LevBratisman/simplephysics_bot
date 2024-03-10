@@ -4,10 +4,10 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 start = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="Материалы")
+            KeyboardButton(text="📖Материалы")
         ],
         [
-            KeyboardButton(text="Информация о боте")
+            KeyboardButton(text="🤖Информация о боте")
         ]
     ],
     resize_keyboard=True,
@@ -18,13 +18,13 @@ start = ReplyKeyboardMarkup(
 start_admin = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="Материалы")
+            KeyboardButton(text="📖Материалы")
         ],
         [
-            KeyboardButton(text="Информация о боте")
+            KeyboardButton(text="🤖Информация о боте")
         ],
         [
-            KeyboardButton(text="Админ панель")
+            KeyboardButton(text="⚙️Админ панель")
         ]
     ],
     resize_keyboard=True,

@@ -60,5 +60,9 @@ async def del_material(m_name):
 async def del_doc(d_name):
     cur.execute('DELETE FROM docs WHERE d_name = ?', (d_name,))
     db.commit()
+    
+async def del_docs_by_material(m_id):
+    cur.execute('DELETE FROM docs WHERE m_id = ?', (m_id,))
+    db.commit()
 
 # ---------UPDATE QUERIES----------
