@@ -13,6 +13,7 @@ from app.handlers.admin_private import admin_private_router
 bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher()
 
+bot.my_admins_list = []
 
 async def main():
     dp.include_router(user_group_router)
