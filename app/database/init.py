@@ -19,4 +19,9 @@ async def db_start():
                 "m_id INTEGER, "
                 "docs_id TEXT, "
                 "FOREIGN KEY (m_id) REFERENCES materials (id))")
+    cur.execute("CREATE TABLE IF NOT EXISTS videos("
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "v_name TEXT, "
+                "v_id TEXT, "
+                "v_caption TEXT)")
     db.commit()

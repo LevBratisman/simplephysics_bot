@@ -10,14 +10,16 @@ from app.handlers.commands import cmd_router
 from app.handlers.admin.base import admin_router
 from app.handlers.admin.materials_settings import materials_settings_router
 from app.handlers.admin.documents_settings import documents_settings_router
+from app.handlers.admin.video_settings import video_settings_router
 from app.handlers.materials import materials_router
+from app.handlers.video import video_router
 
 
 
 load_dotenv(find_dotenv())
 
 dp = Dispatcher()
-bot = Bot(os.getenv('TOKEN'))
+bot = Bot(os.getenv('TOKEN'), parse_mode='HTML')
 
 
 # Database init
@@ -32,9 +34,11 @@ async def main():
     dp.include_router(admin_router)
     dp.include_router(materials_settings_router)
     dp.include_router(documents_settings_router)
+    dp.include_router(video_settings_router)
     dp.include_router(materials_router)
+    dp.include_router(video_router)
     dp.include_router(common_router)
-    
+        
     # Start bot
     await on_startup()
     await bot.delete_webhook(drop_pending_updates=True)

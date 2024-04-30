@@ -4,7 +4,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 from app.filters import AdminFilter
-from app.database.dao import get_users_all, get_materials_all, get_docs_all
+from app.database.dao import get_users_all, get_materials_all, get_docs_all, get_videos_all
 
 from app.keyboards import reply as rp
 from app.keyboards import inline as inl
@@ -111,6 +111,8 @@ async def get_statistics(message: Message):
     await message.answer(f'Всего пользователей: {len(await get_users_all())}')
     await message.answer(f'Всего материалов: {len(await get_materials_all())}')
     await message.answer(f'Всего документов: {len(await get_docs_all())}')
+    await message.answer(f'Всего видео: {len(await get_videos_all())}')
+    
     users = await get_users_all()
     await message.answer(f'----------------------------\n' +
                         f'<i>Список пользователей:</i>', parse_mode='HTML')

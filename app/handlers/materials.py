@@ -29,6 +29,11 @@ class Materials(StatesGroup):
 @materials_router.message(F.text == '📖Материалы')
 async def get_materials_start(message: Message, state: FSMContext):
     await state.set_state(Materials.material)
+    keyboard = builder.get_materials_kb()
+    if not keyboard:
+        await message.answer("Пусто...")
+        await state.clear()
+        return
     await message.answer("Подгружаю материалы...", reply_markup=ReplyKeyboardRemove())
     await asyncio.sleep(0.7)
     await message.answer("Готово! Выбирайте:", 

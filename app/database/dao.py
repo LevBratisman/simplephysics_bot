@@ -27,6 +27,14 @@ async def get_docs_by_material(m_id):
 async def get_doc_by_name(d_name):
     return cur.execute('SELECT * FROM docs WHERE d_name = ?', (d_name,)).fetchone()
 
+
+# -videos-
+async def get_videos_all():
+    return cur.execute('SELECT * FROM videos').fetchall()
+
+async def get_video_by_name(v_name):
+    return cur.execute('SELECT * FROM videos WHERE v_name = ?', (v_name,)).fetchone()
+
 # ---------INSERT QUERIES----------
 
 # -users-
@@ -47,6 +55,12 @@ async def add_material(m_name):
 async def add_doc(d_name, m_id, docs_id):
     cur.execute('INSERT INTO docs (d_name, m_id, docs_id) VALUES (?, ?, ?)', (d_name, m_id, docs_id))
     db.commit()
+    
+    
+# -videos-
+async def add_video(v_name, v_id, v_caption):
+    cur.execute('INSERT INTO videos (v_name, v_id, v_caption) VALUES (?, ?, ?)', (v_name, v_id, v_caption))
+    db.commit()
 
 
 # ---------DELETE QUERIES----------
@@ -64,5 +78,11 @@ async def del_doc(d_name):
 async def del_docs_by_material(m_id):
     cur.execute('DELETE FROM docs WHERE m_id = ?', (m_id,))
     db.commit()
+    
+# -videos-
+async def del_video_by_name(v_name):
+    cur.execute('DELETE FROM videos WHERE v_name = ?', (v_name,))
+    db.commit()
+    
 
 # ---------UPDATE QUERIES----------

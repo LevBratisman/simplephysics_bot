@@ -7,6 +7,9 @@ start = ReplyKeyboardMarkup(
             KeyboardButton(text="📖Материалы")
         ],
         [
+            KeyboardButton(text="🎥Видео-контент")
+        ],
+        [
             KeyboardButton(text="🤖Информация о боте")
         ]
     ],
@@ -19,6 +22,9 @@ start_admin = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="📖Материалы")
+        ],
+        [
+            KeyboardButton(text="🎥Видео-контент")
         ],
         [
             KeyboardButton(text="🤖Информация о боте")
@@ -42,6 +48,10 @@ admin_panel = ReplyKeyboardMarkup(
         [
             KeyboardButton(text="Добавить документ"),
             KeyboardButton(text="Удалить документ")
+        ],
+        [
+            KeyboardButton(text="Добавить видео"),
+            KeyboardButton(text="Удалить видео")
         ],
         [
             KeyboardButton(text="Сделать рассылку"),

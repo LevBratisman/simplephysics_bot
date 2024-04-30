@@ -8,3 +8,4 @@ private = [
     BotCommand(command="contacts", description="Контакты"),
     BotCommand(command="faq", description="Ответы на вопросы")
 ]
+

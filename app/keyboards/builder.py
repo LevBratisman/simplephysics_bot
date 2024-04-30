@@ -3,7 +3,7 @@ import asyncio
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from app.database.dao import get_materials_all, get_docs_all
+from app.database.dao import get_materials_all, get_docs_all, get_videos_all
 from app.database.init import db_start
 
 asyncio.run(db_start())
@@ -13,10 +13,13 @@ asyncio.run(db_start())
 data = asyncio.run(get_materials_all())
 
 def get_materials_kb():
-    kb = InlineKeyboardBuilder()
-    for material in data:
-        kb.add(InlineKeyboardButton(text=material[1], callback_data=material[1]))
-    return kb.adjust(1).as_markup(resize_keyboard=True)
+    if len(data) == 0:
+        return []
+    else:
+        kb = InlineKeyboardBuilder()
+        for material in data:
+            kb.add(InlineKeyboardButton(text=material[1], callback_data=material[1]))
+        return kb.adjust(1).as_markup(resize_keyboard=True)
 
 async def update_materials_kb():
     global data
@@ -37,3 +40,21 @@ def get_docs_kb(catalog_id):
 async def update_docs_kb():
     global docs_data
     docs_data = await get_docs_all()
+    
+    
+# ---------Videos keyboard----------
+
+video_data = asyncio.run(get_videos_all())
+
+def get_videos_kb():
+    kb = InlineKeyboardBuilder()
+    if len(video_data) == 0:
+        return []
+    else:
+        for video in video_data:
+            kb.add(InlineKeyboardButton(text=video[1], callback_data=video[1]))
+        return kb.adjust(1).as_markup(resize_keyboard=True)
+
+async def update_videos_kb():
+    global video_data
+    video_data = await get_videos_all()

@@ -1,6 +1,6 @@
 import asyncio, os
 
-from aiogram import Router, F
+from aiogram import Router, F, Bot
 from aiogram.filters import CommandStart
 from aiogram.types import Message, ReplyKeyboardRemove
 
