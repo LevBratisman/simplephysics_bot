@@ -6,6 +6,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 
 from app.database.dao import add_user
 from app.keyboards import reply as rp
+from app.common.text import text_about
 
 
 from dotenv import load_dotenv, find_dotenv
@@ -41,20 +42,20 @@ async def start_cmd(message: Message):
 # INFO ABOUT BOT
 @common_router.message(F.text == "🤖Информация о боте")
 async def about_bot(message: Message):
-    await message.answer_sticker(sticker="CAACAgIAAxkBAAPUZdtMgrKCGWN1hGG7sC9lB1Ob2nIAAhsTAAJakthIYwemdV7Qq5c0BA", 
-                                 reply_markup=ReplyKeyboardRemove())
+    await message.answer_sticker(sticker="CAACAgIAAxkBAAPUZdtMgrKCGWN1hGG7sC9lB1Ob2nIAAhsTAAJakthIYwemdV7Qq5c0BA")
     await asyncio.sleep(1)
-    await message.answer("Моя основная задача - предоставлять вам учебные материалы по физике!")
-    await asyncio.sleep(0.7)
-    await message.answer("По сути, я являюсь хранилищем всего самого полезного, что создается командой Simple Physics")
-    await asyncio.sleep(0.7)
+    await message.answer(text_about)
+    # await message.answer("Моя основная задача - предоставлять вам учебные материалы по физике!")
+    # await asyncio.sleep(0.7)
+    # await message.answer("По сути, я являюсь хранилищем всего самого полезного, что создается командой Simple Physics")
+    # await asyncio.sleep(0.7)
     
-    if message.from_user.id == int(os.getenv('ADMIN_ID')):
-        await message.answer(f'Переходите на наш канал, где еженедельно выпускается много интересного и познавательного контента:\n\n https://t.me/simplephysics_polyteh',
-                             reply_markup=rp.start_admin)
-    else:
-        await message.answer(f'Переходите на наш канал, где еженедельно выпускается много интересного и познавательного контента:\n\n https://t.me/simplephysics_polyteh',
-                             reply_markup=rp.start)
+    # if message.from_user.id == int(os.getenv('ADMIN_ID')):
+    #     await message.answer(f'Переходите на наш канал, где еженедельно выпускается много интересного и познавательного контента:\n\n https://t.me/simplephysics_polyteh',
+    #                          reply_markup=rp.start_admin)
+    # else:
+    #     await message.answer(f'Переходите на наш канал, где еженедельно выпускается много интересного и познавательного контента:\n\n https://t.me/simplephysics_polyteh',
+    #                          reply_markup=rp.start)
     
     
 # ECHO HANDLER

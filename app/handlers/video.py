@@ -81,3 +81,5 @@ async def get_video_to_menu(callback: CallbackQuery, state: FSMContext):
         await callback.message.delete()
         await callback.answer('Видео-контент')
         await callback.message.answer("Выберите видео:", reply_markup=builder.get_videos_kb())
+        
+

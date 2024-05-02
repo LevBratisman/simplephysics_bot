@@ -27,15 +27,9 @@ async def about_cmd(message: Message, state: FSMContext):
 @cmd_router.message(Command("contacts"))
 async def contacts_cmd(message: Message, state: FSMContext):
     await state.clear()
-    await message.answer("По всем вопросам обращайтесь к моему создателю: @bratisman")
-    
-    
-# /faq command handler
-@cmd_router.message(Command("faq"))
-async def faq_cmd(message: Message, state: FSMContext):
-    await state.clear()
-    await message.answer("В разработке...")
-    
+    await message.answer(f'По всем вопросам обращайтесь к моему создателю: @bratisman\n\n' +
+                         f'Наш канал: @simplephysics_polyteh')
+        
     
 # /materials command handler
 @cmd_router.message(Command("materials"))

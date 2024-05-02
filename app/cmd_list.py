@@ -6,6 +6,5 @@ private = [
     BotCommand(command="menu", description="Перейти в меню"),
     BotCommand(command="about", description="Информация о боте"),
     BotCommand(command="contacts", description="Контакты"),
-    BotCommand(command="faq", description="Ответы на вопросы")
 ]
 
